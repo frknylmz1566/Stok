@@ -2,6 +2,7 @@ package View;
 
 
 import Controller.stockController;
+import Model.stockModel;
 
 import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
@@ -19,12 +20,23 @@ import java.text.DateFormat;
 
 public class GUI extends JFrame {
 
-	private JPanel contentPane;				
-	private JTextField TF_Stok_Kodu;
-	private JTextField TF_Stok_Adi;
-	private JTextField TF_Barkod;
-	private JTable table;
-	
+	stockModel stockmodel;
+	public JPanel contentPane;				
+	public JTextField TF_Stok_Kodu;
+	public JTextField TF_Stok_Adi;
+	public JTextField TF_Barkod;
+	public JTable table;
+	public JTextField TF_Ara;
+	public JButton btnEkle;
+	public JButton btnSil;
+	public JComboBox CB_Stok_Tipi;
+	public JComboBox CB_Stok_Birim;
+	public JComboBox CB_Kdv_Tipi;
+	public JTextArea TA_Aciklama;
+	public JFormattedTextField FTF_Tarih;
+	public JButton btnGüncelle;
+	public JButton btnAra;
+	public JButton btnGetData;
 	
 	public GUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,8 +44,7 @@ public class GUI extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
-	    stockController<?> controller = new stockController();
+		    
 		
 		JLabel lblNewLabel = new JLabel("Stok Kodu");
 		
@@ -63,76 +74,36 @@ public class GUI extends JFrame {
 		
 		
 		
-		JComboBox CB_Stok_Tipi = new JComboBox();
+	    CB_Stok_Tipi = new JComboBox();
 		CB_Stok_Tipi.setModel(new DefaultComboBoxModel(new String[] {"11", "12", "13", "14", "15"}));
 		
-		JComboBox CB_Stok_Birim = new JComboBox();
+		 CB_Stok_Birim = new JComboBox();
 		CB_Stok_Birim.setModel(new DefaultComboBoxModel(new String[] {"Birim1", "Birim2", "Birim3", "Birim4"}));
 		
-		JComboBox CB_Kdv_Tipi = new JComboBox();
+		 CB_Kdv_Tipi = new JComboBox();
 		CB_Kdv_Tipi.setModel(new DefaultComboBoxModel(new String[] {"08", "18", "30"}));
 		
-		JTextArea TA_Aciklama = new JTextArea();
-		JFormattedTextField FTF_Tarih = new JFormattedTextField();
+		TA_Aciklama = new JTextArea();
+		FTF_Tarih = new JFormattedTextField();
+		
 		
 		table = new JTable();
 		
-		
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				controller.DataWrite(table,TF_Stok_Kodu,TF_Stok_Adi,CB_Stok_Tipi,CB_Stok_Birim,TF_Barkod,CB_Kdv_Tipi,TA_Aciklama,FTF_Tarih);
-			}
-		});
-		
-		JButton btn_Ekle = new JButton("Ekle");
-		btn_Ekle.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {						
-				 controller.Add(
-						 TF_Stok_Kodu.getText(),
-						 TF_Stok_Adi.getText(),
-						 Integer.parseInt(CB_Stok_Tipi.getSelectedItem().toString()),
-						 CB_Stok_Birim.getSelectedItem().toString(),
-						 TF_Barkod.getText(),
-						 Double.parseDouble(CB_Kdv_Tipi.getSelectedItem().toString()),
-						 TA_Aciklama.getText(),
-						 FTF_Tarih.getText()
-						);								 		 				
-			}
-			
-		});
-		
-		
-		JButton btn_Sil = new JButton("Sil");
-		btn_Sil.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+								
+		btnEkle = new JButton("Ekle");			
+		btnSil = new JButton("Sil");
 				
-				controller.Delete(TF_Stok_Kodu.getText());
-				
-			}
-		});
 		
-	
+		btnGetData = new JButton("Get Data");
 		
 		
-		JButton btn_Get_Data = new JButton("Get Data");
-		btn_Get_Data.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				model.setRowCount(0);
-				model.setColumnCount(0);
-				controller.GetData(table);	
-				
-			}
-		});
+		btnGüncelle = new JButton("Güncelle");
 		
-		JButton btnNewButton = new JButton("Güncelle");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.Update(TF_Stok_Kodu,TF_Stok_Adi,CB_Stok_Tipi,CB_Stok_Birim,TF_Barkod,CB_Kdv_Tipi,TA_Aciklama,FTF_Tarih);
-			}
-		});
 		
+		TF_Ara = new JTextField();	
+		
+		btnAra = new JButton("Ara");
+					
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -140,40 +111,45 @@ public class GUI extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNewLabel)
+						.addComponent(lblNewLabel_1)
+						.addComponent(lblNewLabel_2)
+						.addComponent(lblNewLabel_3)
+						.addComponent(lblNewLabel_4)
+						.addComponent(lblNewLabel_5)
+						.addComponent(lblNewLabel_6)
+						.addComponent(lblNewLabel_7))
+					.addGap(28)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnGüncelle, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel)
-								.addComponent(lblNewLabel_1)
-								.addComponent(lblNewLabel_2)
-								.addComponent(lblNewLabel_3)
-								.addComponent(lblNewLabel_4)
-								.addComponent(lblNewLabel_5)
-								.addComponent(lblNewLabel_6)
-								.addComponent(lblNewLabel_7))
-							.addGap(28)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(btn_Ekle, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btn_Sil, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE))
-								.addComponent(CB_Kdv_Tipi, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(TF_Barkod)
-								.addComponent(CB_Stok_Birim, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(CB_Stok_Tipi, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(TF_Stok_Adi)
-								.addComponent(TF_Stok_Kodu, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-								.addComponent(FTF_Tarih)
-								.addComponent(TA_Aciklama))
-							.addGap(31)
-							.addComponent(table, GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
-						.addComponent(btn_Get_Data, Alignment.TRAILING))
-					.addContainerGap())
+							.addComponent(btnEkle, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnSil, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
+						.addComponent(CB_Kdv_Tipi, 0, 194, Short.MAX_VALUE)
+						.addComponent(TF_Barkod, 194, 194, Short.MAX_VALUE)
+						.addComponent(CB_Stok_Birim, 0, 194, Short.MAX_VALUE)
+						.addComponent(CB_Stok_Tipi, 0, 194, Short.MAX_VALUE)
+						.addComponent(TF_Stok_Adi, 194, 194, Short.MAX_VALUE)
+						.addComponent(TF_Stok_Kodu, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+						.addComponent(FTF_Tarih, 194, 194, Short.MAX_VALUE)
+						.addComponent(TA_Aciklama, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE))
+					.addGap(31)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(table, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(TF_Ara, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnAra, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+							.addComponent(btnGetData)
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addGap(10))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(11)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
@@ -209,14 +185,17 @@ public class GUI extends JFrame {
 								.addComponent(FTF_Tarih, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btn_Ekle, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btn_Sil, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnEkle, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnSil, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
 							.addGap(8)
-							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE))
-						.addComponent(table, GroupLayout.PREFERRED_SIZE, 480, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btn_Get_Data, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(23, Short.MAX_VALUE))
+							.addComponent(btnGüncelle, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE))
+						.addComponent(table, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(TF_Ara, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+						.addComponent(btnAra, GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+						.addComponent(btnGetData, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
+					.addGap(73))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
